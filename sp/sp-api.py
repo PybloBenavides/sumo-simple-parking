@@ -21,6 +21,10 @@ rerouted_vehs = None
 
 
 def find_parking_spot():
+	'''
+	Find a free parking spot.
+	(Playing god, sees everything) 
+	'''
 	global parkings_occ
 	for parking, occupancy in parkings_occ.items():
 		if occupancy is None:
@@ -29,6 +33,9 @@ def find_parking_spot():
 
 
 def reroute_to_parking_spot(vehicle, parking_spot):
+	'''
+	Change vehicle's path to given parking spot
+	'''
 	global vehicle_handler, parkings_occ, step
 	vehicle_handler.changeTarget(vehicle,parking_spot)
 	print(f"Vehicle {vehicle} going into {parking_spot}")
@@ -37,6 +44,9 @@ def reroute_to_parking_spot(vehicle, parking_spot):
 	parkings_occ[parking_spot] = (vehicle, parking_duration + step)
 
 def exit_parking( vehicle, parking_spot ):
+	'''
+	Make vehicle exit Parking spot and Parking lot.
+	'''
 	global parkings_occ
 	vehicle_handler.changeTarget( vehicle, PARKING_EXIT )
 	print(f"rerouting {vehicle} to {PARKING_EXIT}")
@@ -47,6 +57,9 @@ def exit_parking( vehicle, parking_spot ):
 		return
 
 def apply_parking_logic():
+	'''
+	Apply parking logic for every vehicle
+	'''
 	global vehicle_handler, parkings_occ, step, rerouted_vehs
 	for vehicle in vehicle_handler.getIDList():
 		current_edge = vehicle_handler.getRoadID( vehicle )
@@ -69,6 +82,9 @@ def apply_parking_logic():
 
 
 def store_parking_lots():
+	'''
+	Store the Parking configuration before simulation
+	'''
 	global parkings_occ
 	edgeHandler = traci.edge
 	parkings = [edge for edge in edgeHandler.getIDList() if "pe" in edge and "pex" not in edge]

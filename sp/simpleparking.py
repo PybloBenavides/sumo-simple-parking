@@ -11,7 +11,7 @@ sumoCmd = [sumoBinary, '-c', os.path.join(sumocfg.networks, r"simple_network\sim
 
 PARKING_EXIT = 'pExit'
 MIN_PARKING_TIME = 15
-MAX_PARKING_TIME = 30
+MAX_PARKING_TIME = 40
 
 parkings_occ = None
 vehicle_handler = None
@@ -65,7 +65,7 @@ def apply_parking_logic():
 		current_edge = vehicle_handler.getRoadID( vehicle )
 		if current_edge == 'pEntrance' and vehicle not in rerouted_vehs: #Reroute to find a parking spot.
 			parking_spot = find_parking_spot()
-			if parking_spot is None:
+			if parking_spot is None: # No parking spots available
 				continue
 			reroute_to_parking_spot(vehicle, parking_spot)
 			vehicle_handler.highlight(vehicle)
@@ -76,9 +76,8 @@ def apply_parking_logic():
 				continue # There is a vehicle but is already leaving the parking
 			parked_veh, end_time = parkings_occ[current_edge]
 			if parked_veh == vehicle:
-				if step > end_time:
+				if step > end_time: #Time is up for this vehicle, it is going to exit parking.
 					exit_parking(parked_veh, current_edge)
-	pass
 
 
 def store_parking_lots():

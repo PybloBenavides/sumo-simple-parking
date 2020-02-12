@@ -96,11 +96,11 @@ def apply_parking_logic( parking_entrance ):
 	if not parking_mall.is_full():
 		for vehicle in vehicle_handler.getIDList():
 			current_edge = vehicle_handler.getRoadID( vehicle )
-			if current_edge == parking_entrance and vehicle not in rerouted_parkers:
+			if current_edge == parking_entrance and vehicle not in rerouted_parkers.keys():
 				parker = Parker(vehicle, parking_mall)
 				print(f"tony parker preference {parker.parking_preference}")
 				reroute_to_parking_zone(parker)
-				rerouted_parkers.append( parker.name )
+				rerouted_parkers[vehicle] = parker
 
 
 

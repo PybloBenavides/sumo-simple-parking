@@ -65,7 +65,7 @@ class Parker():
 		zoneA = parking_mall.zones['A']
 		zoneB = parking_mall.zones['B']
 		self.parking_preference = [zoneA,zoneB] if random.randint(0,10) > 3 else [zoneB, zoneA]
-
+		self.is_parking = False
 	def __str__(self):
 		return self.name
 
@@ -96,12 +96,16 @@ def apply_parking_logic( parking_entrance ):
 	if not parking_mall.is_full():
 		for vehicle in vehicle_handler.getIDList():
 			current_edge = vehicle_handler.getRoadID( vehicle )
-			if current_edge == parking_entrance and vehicle not in rerouted_parkers.keys():
-				parker = Parker(vehicle, parking_mall)
-				print(f"tony parker preference {parker.parking_preference}")
-				reroute_to_parking_zone(parker)
-				rerouted_parkers[vehicle] = parker
-
+			if vehicle not in rerouted_parkers:
+				if current_edge == parking_entrance:
+					parker = Parker(vehicle, parking_mall)
+					print(f"tony parker preference {parker.parking_preference}")
+					reroute_to_parking_zone(parker)
+					rerouted_parkers[vehicle] = parker
+			else:
+				parker = rerouted_parkers[vehicle]
+				if current_edge in self.parking_preference.entrances:
+					print("tony parker is in the entrance of its desired zone.")
 
 
 

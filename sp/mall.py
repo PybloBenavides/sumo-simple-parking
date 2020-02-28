@@ -124,10 +124,11 @@ def store_parking_lots(traci):
 def reroute_to_parking_zone( parker ):
 	global vehicle_handler, parking_mall
 	desired_zone = parker.parking_preference[0]
-	print(f"rerouting veh {parker.name} to zone entrance {desired_zone.entrances[0]}")
+	# print(f"rerouting veh {parker.name} to zone entrance {desired_zone.entrances[0]}")
 	try:
 		vehicle_handler.changeTarget( parker.name, desired_zone.entrances[0] )
 	except:
+		# print(f"exception triggered, going to {desired_zone.entrances[1]}")
 		vehicle_handler.changeTarget( parker.name, desired_zone.entrances[1] )
 	#TODO: Change entrances[0] to shortest path entrance
 
@@ -159,7 +160,7 @@ def exit_parking( parker ):
 	vehicle_handler.changeTarget( parker.name, NETWORK_EXIT )
 	print(f"rerouting {parker.name} to {NETWORK_EXIT}")
 	try:
-		vehicle_handler.resume(vehicle)
+		vehicle_handler.resume(parker.name) # This one fails some times we dont know why
 		parker.free_parking_spot()
 		parkings_occ[parking_spot] = None
 	except:
@@ -193,12 +194,12 @@ def apply_parking_logic( parking_entrance, step ):
 					if step >= parker.end_parking_time:
 						exit_parking(parker)
 						print(f"{parker.name} is going to leave the parking ...")
-			elif current_edge == PARKING_EXIT:
+			if current_edge == PARKING_EXIT:
 				parking_mall.vehicle_leaves()
 				rerouted_parkers.pop(vehicle)
-	print(f"parking mall vehicles inside: {parking_mall.vehicles_inside}")
+	# print(f"parking mall vehicles inside: {parking_mall.vehicles_inside}")
 	free_spots = parking_mall.get_free_parking_spots()
-	print(f"free parking spots: {free_spots}")
+	# print(f"free parking spots: {free_spots}")
 
 
 

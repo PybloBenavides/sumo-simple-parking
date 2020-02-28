@@ -51,6 +51,13 @@ class ParkingMall():
 		self. vehicles_inside -= 1
 	def is_full(self):
 		return self.vehicles_inside == self.capacity
+	def get_free_parking_spots(self):
+		count = 0
+		for zone in self.zones.values():
+			for spot in zone.parking_spots.values():
+				if spot is None:
+					count += 1
+		return count
 	
 
 class ParkingZone():
@@ -82,7 +89,7 @@ class Parker():
 		self.is_parking = False
 		self.parking_spot = None
 		self.end_parking_time = None
-	def park(self, step):
+	def park(self):
 		self.is_parking = True
 	def change_parking_preference(self):
 		self.parking_preference = list(reversed(self.parking_preference))
@@ -117,7 +124,11 @@ def store_parking_lots(traci):
 def reroute_to_parking_zone( parker ):
 	global vehicle_handler, parking_mall
 	desired_zone = parker.parking_preference[0]
-	vehicle_handler.changeTarget( parker.name, desired_zone.entrances[0] )
+	print(f"rerouting veh {parker.name} to zone entrance {desired_zone.entrances[0]}")
+	try:
+		vehicle_handler.changeTarget( parker.name, desired_zone.entrances[0] )
+	except:
+		vehicle_handler.changeTarget( parker.name, desired_zone.entrances[1] )
 	#TODO: Change entrances[0] to shortest path entrance
 
 def reroute_to_parking_spot(parker, parking_spot):
@@ -156,36 +167,38 @@ def exit_parking( parker ):
 
 def apply_parking_logic( parking_entrance, step ):
 	global vehicle_handler, rerouted_parkers, parking_mall
-	if not parking_mall.is_full():
-		for vehicle in vehicle_handler.getIDList():
-			current_edge = vehicle_handler.getRoadID( vehicle )
-			if vehicle not in rerouted_parkers:
-				if current_edge == parking_entrance:
-					parker = Parker(vehicle, parking_mall)
+	# if not parking_mall.is_full():
+	for vehicle in vehicle_handler.getIDList():
+		current_edge = vehicle_handler.getRoadID( vehicle )
+		if vehicle not in rerouted_parkers:
+			if current_edge == parking_entrance and not parking_mall.is_full():
+				parker = Parker(vehicle, parking_mall)
+				reroute_to_parking_zone(parker)
+				rerouted_parkers[vehicle] = parker
+				parking_mall.vehicle_enters()
+		else:
+			parker = rerouted_parkers[vehicle]
+			parking_zone = parker.parking_preference[0]
+			if current_edge in parking_zone.entrances and parker.parking_spot is None:
+				spot = find_spot_in_zone(parker, parking_zone)
+				# print("tony parker is in the entrance of its desired zone.")
+				if spot is None:
+					parker.change_parking_preference()
 					reroute_to_parking_zone(parker)
-					rerouted_parkers[vehicle] = parker
-					parking_mall.vehicle_enters()
-			else:
-				parker = rerouted_parkers[vehicle]
-				parking_zone = parker.parking_preference[0]
-				if current_edge in parking_zone.entrances and parker.parking_spot is None:
-					spot = find_spot_in_zone(parker, parking_zone)
-					# print("tony parker is in the entrance of its desired zone.")
-					if spot is None:
-						parker.change_parking_preference()
-						reroute_to_parking_zone(parker)
-				elif current_edge == parker.parking_spot:
-					if not parker.is_parking: # parker just entered parking spot
-						parker.park(step)
-					else:
-						if step >= parker.end_parking_time:
-							exit_parking(parker)
-				elif current_edge == PARKING_EXIT:
-					parking_mall.vehicle_leaves()
-					rerouted_parkers.pop(vehicle)
-	else:
-		print("parking is fullerino")
-
+			elif current_edge == parker.parking_spot:
+				if not parker.is_parking: # parker just entered parking spot
+					parker.park( )
+					print(f"{parker.name} is going to start parking ...")
+				else:
+					if step >= parker.end_parking_time:
+						exit_parking(parker)
+						print(f"{parker.name} is going to leave the parking ...")
+			elif current_edge == PARKING_EXIT:
+				parking_mall.vehicle_leaves()
+				rerouted_parkers.pop(vehicle)
+	print(f"parking mall vehicles inside: {parking_mall.vehicles_inside}")
+	free_spots = parking_mall.get_free_parking_spots()
+	print(f"free parking spots: {free_spots}")
 
 
 

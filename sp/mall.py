@@ -198,7 +198,7 @@ def apply_parking_logic( parking_entrance, step ):
 				parking_mall.vehicle_leaves()
 				rerouted_parkers.pop(vehicle)
 	# print(f"parking mall vehicles inside: {parking_mall.vehicles_inside}")
-	free_spots = parking_mall.get_free_parking_spots()
+	# free_spots = parking_mall.get_free_parking_spots()
 	# print(f"free parking spots: {free_spots}")
 
 

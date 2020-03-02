@@ -421,10 +421,11 @@
     <parkingArea id="ParkAreaB" lane="pb0_0" startPos="0" endPos="30" roadsideCapacity="3" angle="90" length="5"/>
     <parkingArea id="ParkAreaB1" lane="pb1_0" startPos="0" endPos="30" roadsideCapacity="3" angle="90" length="5"/>
 
-    <rerouter id="myRerouter" edges="pa0">
+    <rerouter id="myRerouter" edges="pa0 pa1">
       <interval begin="0" end="2000">
          <parkingAreaReroute id="ParkAreaA"/>
          <parkingAreaReroute id="ParkAreaA1"/>
+         <parkingAreaReroute id="ParkAreaB"/>
       </interval>
    </rerouter>
 </net>

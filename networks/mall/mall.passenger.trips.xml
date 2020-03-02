@@ -5,6 +5,28 @@
 <routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/routes_file.xsd">
     <vType id="veh_passenger" vClass="passenger"/>
     <trip id="veh0" type="veh_passenger" depart="0.00" departLane="best" from="networkEntrance" to="networkExit" color="0,0,1"/>
+    <trip id="veh24" type="veh_passenger" depart="1.55" departLane="best" from="networkEntrance" to="pa1" color="1,0,1">
+        <stop parkingArea="ParkAreaA" duration="20"/>
+    </trip>
+
+    <trip id="veh19" type="veh_passenger" depart="1.55" departLane="best" from="networkEntrance" to="pa1" color="1,0,1">
+        <stop parkingArea="ParkAreaA" duration="20"/>
+    </trip>
+    <trip id="veh20" type="veh_passenger" depart="2.55" departLane="best" from="networkEntrance" to="pa1" color="1,0,1">
+        <stop parkingArea="ParkAreaA" duration="20"/>
+    </trip>
+
+    <trip id="veh21" type="veh_passenger" depart="3.55" departLane="best" from="networkEntrance" to="pa1" color="1,0,1">
+        <stop parkingArea="ParkAreaA" duration="20"/>
+    </trip>
+
+    <trip id="veh22" type="veh_passenger" depart="6.55" departLane="best" from="networkEntrance" to="pa1" color="1,0,1">
+        <stop parkingArea="ParkAreaA" duration="20"/>
+    </trip>
+
+    <trip id="veh23" type="veh_passenger" depart="7.55" departLane="best" from="networkEntrance" to="pa1" color="1,0,1">
+        <stop parkingArea="ParkAreaA" duration="20"/>
+    </trip>
     <trip id="veh4" type="veh_passenger" depart="31.01" departLane="best" from="networkEntrance" to="networkExit" color="0,0,1"/>
     <trip id="veh5" type="veh_passenger" depart="38.76" departLane="best"  from="networkEntrance" to="networkExit" color="0,0,1"/>
     <trip id="veh6" type="veh_passenger" depart="46.52" departLane="best" from="networkEntrance" to="networkExit" color="0,0,1"/>
@@ -19,5 +41,6 @@
     <trip id="veh16" type="veh_passenger" depart="124.04" departLane="best" from="networkEntrance" to="networkExit" color="0,0,1"/>
     <trip id="veh17" type="veh_passenger" depart="131.79" departLane="best" from="networkEntrance" to="networkExit" color="0,0,1"/>
     <trip id="veh18" type="veh_passenger" depart="139.55" departLane="best" from="networkEntrance" to="networkExit" color="0,0,1"/>
+    
 
 </routes>
